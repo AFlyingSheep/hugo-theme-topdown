@@ -17,7 +17,7 @@
 
 	<h1>教师们</h1>
 	<div class="people-group">
-		{{ range .Pages.ByPublishDate.Reverse }}
+		{{ range sort .Pages "Params.teacher_sort" }}
 			{{ $RelPermalink := .RelPermalink }}
 			{{ $Title := .Title }}
 			{{ $cn_name := .Params.cn_name }}
