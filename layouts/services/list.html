@@ -1,0 +1,50 @@
+{{ define "main" }}
+<div class="topdown-main">
+
+<!-- Lab News -->
+<section class="panel-fog"> 
+	<header>
+		<h2 class="section-title">{{ .Params.title | safeHTML }}</h2>
+		<p class="section-subtitle">{{ .Params.subtitle | safeHTML }}</p>
+	</header>
+
+	<section class="panel-fog"> 
+		<div class="six-grids">
+
+		{{ range .Data.Pages }}
+			{{ $link := .Params.fixed_link }}
+			<article class="second-grid">
+				<div class = "second-grid-pic">
+					<a href="{{ .Params.fixed_link }}">
+						{{ $img := .Params.img_url }}
+						{{ if strings.HasPrefix $img "http://" -}}
+							<!-- 外链图片 -->
+							<img class="landscape" src="{{ $img }}">
+						{{ else if strings.HasPrefix $img "https://" -}}
+							<!-- 外链图片 -->
+							<img class="landscape" src="{{ $img }}">
+						{{ else -}}
+							<!-- 内链图片 -->
+							<img class="landscape" src="{{ $.Site.BaseURL }}/{{ $img }}">
+						{{ end }}
+					</a>
+				</div>
+				<div class="grid-content">
+					<div class="post-meta">
+						<p>{{ .Params.types }}</p>
+					</div>
+					<h3>
+						<a href="{{ .Params.fixed_link }}">
+						{{ .Params.title }}
+						</a>
+					</h3>
+					<p class="post-abstract">{{ .Params.abstract }}</p>
+				</div>
+			</article>
+		{{ end }}
+	</div>
+</section>
+
+</section>
+</div>
+{{ end }}

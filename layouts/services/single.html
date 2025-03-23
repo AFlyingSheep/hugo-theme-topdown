@@ -1,0 +1,59 @@
+{{ define "main" }}
+<div class="topdown-main">
+		<div class="publications-column">
+			<h1 style="text-align:left; font-size: xx-large; color:black;">{{ .Params.title }}</h1>
+			<!-- <p>排版有待调整</p> -->
+	
+			{{ $root := . }}
+			
+			{{  .Params.date.Format "2006-01-02"  }} | By 
+			<span class="paper-FirstAuthor">
+				{{ range .Params.Journalist }}
+					{{ $name := . }}
+					{{ $words := split . " " }}
+					{{ $reversedName := (index $words 0) | printf "%s%s" (index $words 1) }}
+					<!-- {{ $reversedName }} -->
+					{{ with $root.Site.GetPage "section" "people" }}
+						{{ with .GetPage  $reversedName }}
+							<!-- 文件存在的处理逻辑 -->
+							<!-- <p>文件存在：{{ .Params.cn_name }}</p> -->
+							<a href="{{ .Permalink }}" 
+								style="color:rgb(146, 157, 192);">
+								<b>{{ $name }}</b>
+							</a>,
+						{{ else }}
+							<!-- 文件不存在的处理逻辑 -->
+							<!-- <p>文件不存在</p> -->
+							<b>{{ $name }}</b>,
+						{{ end }}
+					{{ end }}
+				{{ end }}
+			</span>
+			
+
+			<hr aria-hidden="true">
+			{{ $root := . }}
+			<!-- {{  (len .TableOfContents) }} -->
+
+			{{ if  gt (len .TableOfContents) 32  }}
+			<div class="sidebar">
+				<div class="clickable" style="background-color: #afc8ff;">
+					<!-- <img src="/icons/pen-fill.svg" alt="Bootstrap Icons" class="icon"> -->
+					<span style="margin: 0 10px;">目录</span>
+				</div>
+				<div class="hidden" style="background-color: #cfdeff">
+					<div class="accordion" id="markdownToc">
+						{{ .TableOfContents }}
+					</div>
+				</div>
+				
+			</div>
+			{{ else }}
+				<!-- <p>No table of contents available.</p> -->
+			{{ end }}
+			
+
+			{{ .Content }}
+		</div>
+</div>
+{{ end }}
