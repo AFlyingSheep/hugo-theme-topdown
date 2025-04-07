@@ -76,22 +76,40 @@
                             {{ end }}
                         </span>
                         <div class="paper-ConfJournal">
-                            {{ $page.Params.ConfJournal }} ({{ $page.Params.ConfJournalAbbr }} {{ $page.Params.Year }})
-                            {{ if eq $page.Params.CCFLevel "A" }}
-                                <b class="rainbow-text">CCF {{ $page.Params.CCFLevel }}</b> 
-                            {{ else }}
-                                <b>CCF {{ $page.Params.CCFLevel }}</b> 
-                            {{ end }}
-                            {{ with $page.Params.IsAConference }}
-                                {{ if eq . "no" }}
-                                <b>Journal</b>
-                                {{ end }}
-                            {{ end }}
-                            {{ with $page.Params.Award }}
-                                <!-- <b class="radial-gradient-text">{{ . }}</b> -->
-                                <b style="color:rgb(191, 4, 4);">{{ . }}</b>
-                            {{ end }}
-                        </div>
+							{{ $page.Params.ConfJournal }} ({{ $page.Params.ConfJournalAbbr }} {{ $page.Params.Year }})
+							{{ $CCFlevel := $page.Params.CCFLevel  }}
+							{{ $JournalLabel := $page.Params.JournalLabel  }}
+							{{ $OutofCSLabel := $page.Params.OutofCSLabel  }}
+							<!-- IsOutofCS: "yes" # 其他领域会议，填yes (比如医疗影响领域会议)
+							OutofCSLabel: "医疗影响领域会议" # 医疗影响领域会议 -->
+							{{ if eq $page.Params.IsOutofCS "yes" }}
+								<b>{{ $OutofCSLabel }}</b> 
+							{{ else }}
+								{{ with $page.Params.IsAConference }}
+									{{ if eq . "yes" }}
+										{{ if eq $CCFlevel "A" }}
+											<b class="rainbow-text">CCF {{ $CCFlevel }}</b> 
+										{{ else if eq $CCFlevel "B" }}
+											<b>CCF {{ $CCFlevel }}</b> 
+										{{ else }}
+											<!-- ignore CCF C -->
+										{{ end }}
+									{{ else }}
+										{{ if eq $CCFlevel "A" }}
+											<b class="rainbow-text">{{ $JournalLabel }}</b>
+										{{ else if eq $CCFlevel "B" }}
+											<b>{{ $JournalLabel }}</b>
+										{{ else }}
+											<!-- ignore CCF C -->
+										{{ end }}										
+									{{ end }}
+								{{ end }}
+							{{ end }}
+							{{ with $page.Params.Award }}
+								<!-- <b class="radial-gradient-text">{{ . }}</b> -->
+								<b style="color:rgb(191, 4, 4);">{{ . }}</b>
+							{{ end }}
+						</div>
                         <div class="paper-multimedia">
                             {{ with $page.Params.Link }}
                                 <a class="icons" href="{{ . | safeHTML }}">
